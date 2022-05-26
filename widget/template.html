@@ -1,0 +1,39 @@
+<h2 class="page-heading page-heading-widget">{{ heading }}</h2>
+<ul class="productGrid productGrid--sale-product"
+  data-slick='{"mobileFirst": true, "slidesToShow": 1, "slidesToScroll": 1, "responsive": [{ "breakpoint": 576, "settings": { "slidesToShow": 2, "slidesToScroll": 1 }},{ "breakpoint": 768, "settings": { "slidesToShow": 3, "slidesToScroll": 1 }},{ "breakpoint": 1024, "settings": { "slidesToShow": 4, "slidesToScroll": 1 }}]}'>
+  {{assignVar "count" 0}}
+  {{#each _.data.site.newestProducts.edges}}
+    {{#if node.prices.salePrice '!=' null}}
+    {{incrementVar "count"}}
+      {{#if (getVar "count") '<=' 16}}
+        <li class="product productWidth productWidget">
+        <article class="card">
+          <figure class="card-figure"> <a href={{node.path}}>
+              <div class="card-img-container"> 
+                <img src="{{#if node.defaultImage '==' null}} https://cdn11.bigcommerce.com/s-wbod8fm4ry/stencil/f0b14240-bef7-013a-25dc-1aeda4ec6ac3/img/ProductDefault.gif
+                    {{else}} {{node.defaultImage.url}} {{/if}}" data-sizes="auto" class="listItem-image
+                    card-image lazyautosizes lazyloaded" sizes="192px"> </div>
+            </a>
+          </figure>
+        </article>
+        <div class="card-body">
+          <p class="card-text" data-test-info-type="brandName">{{node.brand.name}}</p>
+          <h3 class="card-title">
+            <a href={{node.path}}>{{node.name}}</a>
+          </h3>
+          <div class="card-text" data-test-info-type="price" style="text-decoration: line-through;">
+            Was: €{{node.prices.basePrice.value}} </div>
+          <div class="card-text" data-test-info-type="price">
+            Now: €{{node.prices.salePrice.value}}
+          </div>
+        </div>
+        </li>
+      {{/if}}
+    {{/if}}
+  {{/each}}
+</ul>
+{{#if (getVar "count") '<=' 0}}
+  <div class="empty-sale-product-section">
+    Unfortunately, there are no products at a discount
+  </div>
+{{/if}}
